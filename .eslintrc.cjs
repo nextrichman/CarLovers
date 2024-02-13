@@ -33,6 +33,6 @@ module.exports = {
       }
     ],
     'vue/no-setup-props-destructure': ['off'], //关闭props校验
-    'no-undef': 'off' //添加未定义变量提示
+    'no-undef': 'error' //添加未定义变量提示
   }
 }
