@@ -1,6 +1,8 @@
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
 import { userGetInfoService } from '../../api/user'
+import { findNewsService } from '../../api/user'
+import { findCommentService } from '../../api/user'
 
 //用户模块token setToken removeToken
 export const useUserStore = defineStore(
@@ -13,24 +15,82 @@ export const useUserStore = defineStore(
     const removeToken = () => {
       token.value = ''
     }
+
     //用户的信息，头像，名字。。。
     const user = ref({})
     const getUser = async () => {
       const res = await userGetInfoService() // 请求获取数据
       user.value = res.data.data
-      console.log(user.value)
+      // console.log('sssssssssssssssssss')
+      // console.log(res.data.data)
+      // console.log(user.value)
     }
     const setUser = (obj) => {
       user.value = obj
     }
 
+    //文章的标题，发布时间，内容。。。
+    const news = ref({})
+    const selfnews = ref({})
+    const findnews = async () => {
+      const res = await findNewsService() // 请求获取数据
+      news.value = res.data.data
+      // console.log('ddddddddddddddddddddddddd')
+      // console.log(res.data.data)
+      // console.log(news.value)
+    }
+    const findselfnews = async (myusername) => {
+      const res = await findNewsService() // 请求获取数据
+      news.value = res.data.data
+      console.log(myusername)
+      console.log(news.value)
+      const myUserName = myusername
+      function filterByUserName(myUserName) {
+        return news.value.filter((item) => item.username == myUserName)
+      }
+      const result = filterByUserName(myUserName)
+      selfnews.value = result
+      console.log(selfnews.value)
+    }
+
+    const comment = ref({})
+    const overcomment = ref({})
+
+    const fetchData = async () => {
+      const res = await findCommentService()
+      comment.value = res.data.data
+    }
+
+    const findcomment = async () => {
+      await fetchData()
+      console.log(comment.value)
+    }
+
+    const filtercomment = async (newsid) => {
+      await fetchData()
+      const myNewsId = newsid
+      function filterByNewsId(myNewsId) {
+        return comment.value.filter((item) => item.newsid == myNewsId)
+      }
+      const result = filterByNewsId(myNewsId)
+      overcomment.value = result
+      console.log(overcomment.value)
+    }
     return {
       token,
       setToken,
       removeToken,
       user,
       getUser,
-      setUser
+      setUser,
+      news,
+      selfnews,
+      findnews,
+      findselfnews,
+      comment,
+      overcomment,
+      findcomment,
+      filtercomment
     }
   },
   { persist: true } //持久化

@@ -5,6 +5,9 @@ settings:
   excludeLinksFromLockfile: false
 
 dependencies:
+  '@ckeditor/ckeditor5-vue':
+    specifier: ^5.1.0
+    version: 5.1.0
   '@element-plus/icons-vue':
     specifier: ^2.3.1
     version: 2.3.1(vue@3.4.18)
@@ -104,6 +107,12 @@ packages:
       '@babel/helper-string-parser': 7.23.4
       '@babel/helper-validator-identifier': 7.22.20
       to-fast-properties: 2.0.0
+
+  /@ckeditor/ckeditor5-vue@5.1.0:
+    resolution: {integrity: sha512-KEx4Tj2Irr4ZbLG8LnaKpb0Dgd8qmLmKFWeiKkQwM3RAAeYRYOCcBVB2Y168I9KA8wRosPxgOO9jbQ92yopYHA==}
+    engines: {node: '>=16.0.0', npm: '>=5.7.1'}
+    requiresBuild: true
+    dev: false
 
   /@ctrl/tinycolor@3.6.1:
     resolution: {integrity: sha512-SITSV6aIXsuVNV3f3O0f2n/cgyEDWoSqtZMYiAmcsYHydcKrOz3gUxB/iXd/Qf08+IZX4KpgNbvUdMBmWz+kcA==}

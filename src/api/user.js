@@ -22,3 +22,38 @@ export const userUpdateAvatarService = (avatar) =>
 // 更新用户密码
 export const userUpdatePasswordService = ({ oldpwd, newpwd, repwd }) =>
   request.patch('/my/updatepwd', { oldpwd, newpwd, repwd })
+
+// 增加发布文章数据接口
+export const addNewsService = ({
+  title,
+  writedate,
+  publishdate,
+  imgurl,
+  content,
+  nickname,
+  username
+}) =>
+  request.post('/article/add', {
+    title,
+    writedate,
+    publishdate,
+    imgurl,
+    content,
+    nickname,
+    username
+  })
+
+//查询发布文章数据接口
+export const findNewsService = () => request.get('/article/find')
+
+// 增加发布评论数据接口
+export const addCommentService = ({ newsid, avatar, username, text }) =>
+  request.post('/comment/add', {
+    newsid,
+    avatar,
+    username,
+    text
+  })
+
+//查询评论数据接口
+export const findCommentService = () => request.get('/comment/find')

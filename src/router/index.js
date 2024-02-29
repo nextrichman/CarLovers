@@ -1,5 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
-// import { useUserStore } from '@/stores'
+import { useUserStore } from '@/stores'
+
 //历史模式 createWebHistory 地址不带#
 //hash模式 createWebhashHistory 带#
 const router = createRouter({
@@ -17,7 +18,7 @@ const router = createRouter({
         },
         {
           path: '/car/carnews/carnewsdetail',
-          component: () => import('@/components/CarNewsDetail.vue')
+          component: () => import('@/views/car/components/CarNewsDetail.vue')
         },
         {
           path: '/car/newsmanage',
@@ -47,9 +48,14 @@ const router = createRouter({
 // 2. false 拦回from的地址页面
 // 3. 具体路径 或 路径对象  拦截到对应的地址
 //    '/login'   { name: 'login' }
-// router.beforeEach((to) => {
-//   // 如果没有token, 且访问的是非登录页，拦截到登录，其他情况正常放行
-//   const useStore = useUserStore()
-//   if (!useStore.token && to.path !== '/login') return '/login'
-// })
+router.beforeEach((to, from, next) => {
+  // 如果没有token, 且访问的是非登录页，拦截到登录，其他情况正常放行
+  const useStore = useUserStore()
+  if (!useStore.token && to.path !== '/login') {
+    next('/login')
+  } else {
+    // 用户已登录或访问登录页，直接放行
+    next()
+  }
+})
 export default router

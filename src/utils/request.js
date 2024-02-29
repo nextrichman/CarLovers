@@ -2,7 +2,6 @@ import axios from 'axios'
 import { useUserStore } from '@/stores'
 // import { ElMessage } from 'element-plus'
 import router from '@/router'
-// const baseURL = 'http://big-event-vue-api-t.itheima.net'
 const baseURL = 'http://127.0.0.1:3000'
 
 //一开始以为请求载荷就是post请求里的表单数据，后面才发现这两个在浏览器的请求中是有区别的：
@@ -43,6 +42,9 @@ instance.interceptors.response.use(
     // TODO 3. 处理业务失败
     // 处理业务失败, 给错误提示，抛出错误
     ElMessage.error(res.data.message || '服务异常')
+    if (res.data.message === '身份认证失败！') {
+      router.push('/login')
+    }
     return Promise.reject(res.data)
   },
   (err) => {

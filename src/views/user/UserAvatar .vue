@@ -17,8 +17,8 @@ const onSelectFile = (uploadFile) => {
 
 const onUpdateAvatar = async () => {
   // 发送请求更新头像
-  console.log(1111111)
-  console.log(imgUrl.value)
+  // console.log(1111111)
+  // console.log(imgUrl.value)
   await userUpdateAvatarService(imgUrl.value)
   // userStore 重新渲染
   await userStore.getUser()

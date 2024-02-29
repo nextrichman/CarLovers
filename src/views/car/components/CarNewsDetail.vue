@@ -1,25 +1,95 @@
+<script>
+import '@fortawesome/fontawesome-free/css/all.css'
+import { useUserStore } from '@/stores'
+import { addCommentService } from '@/api/user'
+
+export default {
+  data() {
+    return {
+      news: {},
+      comments: [],
+      upcomments: { newsid: null, avatar: '', username: '', text: '' },
+      // a: { newsid: 6 },
+      showInput: false,
+      newComment: ''
+    }
+  },
+  methods: {
+    toggleCommentInput() {
+      this.showInput = !this.showInput
+    },
+    async addComment() {
+      if (this.newComment.trim() !== '') {
+        this.comments.push({
+          id: this.comments.length + 1,
+          text: this.newComment
+        })
+        this.showInput = false
+      }
+      this.upcomments.avatar = useUserStore().user.user_pic
+      this.upcomments.username = useUserStore().user.username
+      this.upcomments.text = this.newComment
+      // console.log(this.upcomments.avatar)
+      // console.log(this.upcomments.username)
+      // console.log(this.upcomments.text)
+      // console.log(this.upcomments)
+      await addCommentService(this.upcomments)
+      // 通知 user 模块，进行数据的更新
+      // useUserStore().findcomment()
+      await useUserStore().filtercomment(Number(this.upcomments.newsid))
+      this.comments = useUserStore().overcomment
+      // console.log(this.comments)
+      // console.log(this.a.newsid)
+      // 提示用户
+      console.log(useUserStore().comment)
+      ElMessage.success('评论成功')
+    }
+  },
+  mounted() {
+    //获取传过来的id及将对应其id的news(store仓库)的数据赋值给this.news
+    let id = this.$route.query.id
+    this.upcomments.newsid = this.$route.query.id
+    // console.log(id)
+    // console.log(useUserStore().user.username)
+    // console.log(useUserStore().news)
+    const foundIndex = useUserStore().news.findIndex((news) => news.id == id)
+    // console.log(foundIndex)
+    this.news = useUserStore().news[foundIndex]
+    // useUserStore().findcomment()
+    useUserStore()
+      .filtercomment(Number(this.upcomments.newsid))
+      .then(() => {
+        this.comments = useUserStore().overcomment
+      })
+  }
+}
+</script>
+
 <template>
   <div class="news-container">
     <div class="news-section">
       <br />
       <h1 style="font-size: 3cap">{{ news.title }}</h1>
-      <p>发布者: 发布者名称</p>
-      <p>发布时间: 2022-01-01</p>
-      <img src="../assets/login_bg1.jpg" alt="新闻图片" class="center" />
+      <p>发布者: {{ news.nickname }}</p>
+      <p>发布时间: {{ news.publishdate }}</p>
+      <img :src="news.imgurl" alt="新闻图片" class="center" />
       <p>{{ news.content }}</p>
       <router-link to="/" class="back-btn">
         <i class="fa fa-arrow-left"> 返回</i>
       </router-link>
     </div>
+
     <div class="comment-section">
       <h2>评论</h2>
       <ul v-if="comments.length > 0" class="comment-list">
         <li v-for="comment in comments" :key="comment.id" class="comment-item">
           <div class="user-info">
             <img :src="comment.avatar" alt="User Avatar" class="avatar" />
-            <span class="username">{{ comment.username }}</span>
+            <div>
+              <span class="username">{{ comment.username }}</span>
+              <p>{{ comment.text }}</p>
+            </div>
           </div>
-          <p>{{ comment.text }}</p>
         </li>
       </ul>
       <p v-else class="no-comments">暂无评论</p>
@@ -49,47 +119,6 @@
     </div>
   </div>
 </template>
-
-<script>
-import '@fortawesome/fontawesome-free/css/all.css'
-import { useRouter } from 'vue-router'
-
-const router = useRouter()
-console.log(router)
-export default {
-  data() {
-    return {
-      news: {
-        title:
-          '新闻标题打撒打撒达瓦酷酷酷酷酷酷酷酷酷看打撒打撒达瓦单位顶顶顶顶的哇哇哇哇哇哇哇哇',
-        content:
-          '新闻内容新闻内容新闻内容新闻内容新闻内容新闻内容新闻内容新闻内容新闻内容新闻内容新闻内容新闻内容新闻内容新闻内容新闻内容新闻内容新闻内容新闻内容新闻内容新闻内容新闻内容新闻内容新闻内容新闻内容新闻内容新闻内容新闻内容新闻内容新闻内容新闻内容新闻内容新闻内容新闻内容新闻内容新闻内容新闻内容新闻内容新闻内容新闻内容新闻内容新闻内容新闻内容新闻内容新闻内容新闻内容新闻内容新闻内容新闻内容新闻内容新闻内容新闻内容新闻内容新闻内容新闻内容新闻内容新闻内容新闻内容新闻内容新闻内容新闻内容新闻内容新闻内容新闻内容新闻内容新闻内容新闻内容新闻内容新闻内容新闻内容新闻内容新闻内容新闻内容新闻内容新闻内容新闻内容新闻内容新闻内容新闻内容新闻内容新闻内容新闻内容新闻内容新闻内容新闻内容新闻内容新闻内容新闻内容新闻内容新闻内容新闻内容新闻内容新闻内容新闻内容新闻内容新闻内容新闻内容新闻内容新闻内容新闻内容新闻内容新闻内容新闻内容新闻内容新闻内容新闻内容新闻内容新闻内容新闻内容新闻内容新闻内容新闻内容新闻内容新闻内容新闻内容新闻内容新闻内容新闻内容新闻内容新闻内容新闻内容新闻内容新闻内容新闻内容新闻内容新闻内容新闻内容新闻内容新闻内容新闻内容新闻内容新闻内容新闻内容新闻内容新闻内容新闻内容新闻内容新闻内容新闻内容新闻内容新闻内容新闻内容新闻内容新闻内容新闻内容新闻内容新闻内容新闻内容新闻内容新闻内容新闻内容新闻内容新闻内容新闻内容新闻内容新闻内容新闻内容新闻内容新闻内容新闻内容新闻内容新闻内容新闻内容'
-      },
-      comments: [
-        { id: 1, text: '这是一个很棒的新闻！', avatar: '', username: 'sss' },
-        { id: 2, text: '期待更多类似的内容。', avatar: '', username: 'sss1' }
-      ],
-      showInput: false,
-      newComment: ''
-    }
-  },
-  methods: {
-    toggleCommentInput() {
-      this.showInput = !this.showInput
-    },
-    addComment() {
-      if (this.newComment.trim() !== '') {
-        this.comments.push({
-          id: this.comments.length + 1,
-          text: this.newComment
-        })
-        this.newComment = ''
-        this.showInput = false
-      }
-    }
-  }
-}
-</script>
 
 <style scoped>
 .news-container {
@@ -212,5 +241,37 @@ export default {
   box-shadow:
     0 8px 16px rgba(0, 0, 0, 0.2),
     0 12px 40px rgba(0, 0, 0, 0.19);
+}
+.comment-item {
+  list-style: none; /* 删除列表前面的点 */
+}
+
+.comment-item .user-info {
+  display: flex; /* 使用弹性布局使得图片和用户名/评论水平排列 */
+  align-items: flex-start; /* 垂直居顶对齐 */
+  margin-bottom: 12px; /* 调整评论项之间的间距 */
+}
+
+.comment-item img {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-right: 12px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* 添加图片阴影效果 */
+}
+
+.comment-item .username {
+  font-weight: bold;
+  font-size: 0.9em; /* 将 username 字体大小设为 0.9em */
+}
+
+.comment-item p {
+  padding: 10px;
+  border-radius: 15px;
+  position: relative;
+  background-color: #dadada; /* 设置评论框的背景颜色 */
+  margin-top: 6px; /* 调整评论框与用户名之间的间距 */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* 添加评论框阴影效果 */
 }
 </style>
