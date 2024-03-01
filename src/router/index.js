@@ -6,6 +6,7 @@ import { useUserStore } from '@/stores'
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL), //'/jd'可在前面增加地址
   routes: [
+    //把component弄成异步组件可以实现路由懒加载，使用哪个一个组件才加载，按需加载。
     { path: '/login', component: () => import('@/views/login/LoginPage.vue') },
     {
       path: '/',
