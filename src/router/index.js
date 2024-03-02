@@ -1,10 +1,12 @@
-import { createRouter, createWebHistory } from 'vue-router'
+import { createRouter, createWebHashHistory } from 'vue-router'
 import { useUserStore } from '@/stores'
 
 //历史模式 createWebHistory 地址不带#
-//hash模式 createWebhashHistory 带#
+//hash模式 createWebHashHistory 带#
+//vite进行打包需要调成hash模式才能以file协议访问，//yarn add @vitejs/plugin-legacy，yarn add terser,需要在vite.config中plugin导入
+// 而且vite 默认使用 ES Module 模块是不支持file协议的，需要使用插件来配置之后才可以正常使用file协议打开。
 const router = createRouter({
-  history: createWebHistory(import.meta.env.BASE_URL), //'/jd'可在前面增加地址
+  history: createWebHashHistory(import.meta.env.BASE_URL), //'/jd'可在前面增加地址
   routes: [
     //把component弄成异步组件可以实现路由懒加载，使用哪个一个组件才加载，按需加载testdemo。
     { path: '/login', component: () => import('@/views/login/LoginPage.vue') },
