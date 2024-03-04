@@ -39,6 +39,7 @@ export default {
       this.upcomments.avatar = useUserStore().user.user_pic
       this.upcomments.username = useUserStore().user.username
       this.upcomments.text = this.newComment
+      this.upcomments.nickname = useUserStore().user.nickname
       // console.log(this.upcomments.avatar)
       // console.log(this.upcomments.username)
       // console.log(this.upcomments.text)
@@ -51,7 +52,7 @@ export default {
       // console.log(this.comments)
       // console.log(this.a.newsid)
       // 提示用户
-      console.log(useUserStore().comment)
+      // console.log(useUserStore().comment)
       ElMessage.success('评论成功')
     }
   },
@@ -70,6 +71,7 @@ export default {
       .filtercomment(Number(this.upcomments.newsid))
       .then(() => {
         this.comments = useUserStore().overcomment
+        // console.log(this.comments)
       })
   }
 }
@@ -80,7 +82,7 @@ export default {
     <div class="news-section">
       <br />
       <h1 style="font-size: 3cap">{{ news.title }}</h1>
-      <p>发布者: {{ news.nickname }}</p>
+      <p>发布者: {{ news.nickname ? news.nickname : news.username }}</p>
       <p>发布时间: {{ news.publishdate }}</p>
       <img :src="news.imgurl" alt="新闻图片" class="center" />
       <p>{{ news.content }}</p>
@@ -96,7 +98,9 @@ export default {
           <div class="user-info">
             <img :src="comment.avatar" alt="User Avatar" class="avatar" />
             <div>
-              <span class="username">{{ comment.username }}</span>
+              <span class="username">{{
+                comment.nickname ? comment.nickname : comment.username
+              }}</span>
               <p>{{ comment.text }}</p>
             </div>
           </div>

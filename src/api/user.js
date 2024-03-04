@@ -50,12 +50,19 @@ export const addNewsService = ({
 export const findNewsService = () => request.get('/article/find')
 
 // 增加发布评论数据接口
-export const addCommentService = ({ newsid, avatar, username, text }) =>
+export const addCommentService = ({
+  newsid,
+  avatar,
+  username,
+  text,
+  nickname
+}) =>
   request.post('/comment/add', {
     newsid,
     avatar,
     username,
-    text
+    text,
+    nickname
   })
 
 //查询评论数据接口
