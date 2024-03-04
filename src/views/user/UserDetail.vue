@@ -3,13 +3,15 @@ import PageContainer from '@/components/PageContainer.vue'
 import { ref } from 'vue'
 import { useUserStore } from '@/stores'
 import { userUpdateInfoService } from '@/api/user'
+import { userUpdatenicknameService } from '@/api/user'
 
 const formRef = ref()
 
 // 是在使用仓库中数据的初始值 (无需响应式) 解构无问题
 const {
   user: { email, id, nickname, username },
-  getUser
+  getUser,
+  findnews
 } = useUserStore()
 
 const form = ref({
@@ -45,6 +47,12 @@ const submitForm = async () => {
   await userUpdateInfoService(form.value)
   // 通知 user 模块，进行数据的更新
   getUser()
+  //修改已发布的文章的nickname
+  await userUpdatenicknameService({
+    username: username,
+    nickname: form.value.nickname
+  })
+  findnews()
   // 提示用户
   ElMessage.success('修改成功')
 }

@@ -34,23 +34,28 @@ export const useUserStore = defineStore(
     const selfnews = ref({})
     const findnews = async () => {
       const res = await findNewsService() // 请求获取数据
-      news.value = res.data.data
+      // let locat=res.data.data
       // console.log('ddddddddddddddddddddddddd')
       // console.log(res.data.data)
       // console.log(news.value)
+      // 使用 sort 方法对数组进行排序
+      news.value = res.data.data.sort((a, b) => {
+        // 将日期字符串转换为 Date 类型，并比较
+        return new Date(b.publishdate) - new Date(a.publishdate)
+      })
+      // console.log(res.data.data) // 输出排序后的数组
     }
     const findselfnews = async (myusername) => {
-      const res = await findNewsService() // 请求获取数据
-      news.value = res.data.data
-      console.log(myusername)
-      console.log(news.value)
+      findnews() // 请求获取数据
+      // console.log(myusername)
+      // console.log(news.value)
       const myUserName = myusername
       function filterByUserName(myUserName) {
         return news.value.filter((item) => item.username == myUserName)
       }
       const result = filterByUserName(myUserName)
       selfnews.value = result
-      console.log(selfnews.value)
+      // console.log(selfnews.value)
     }
 
     const comment = ref({})
@@ -74,7 +79,7 @@ export const useUserStore = defineStore(
       }
       const result = filterByNewsId(myNewsId)
       overcomment.value = result
-      console.log(overcomment.value)
+      // console.log(overcomment.value)
     }
     return {
       token,

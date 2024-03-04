@@ -6,7 +6,8 @@ export default {
       newsList: []
     }
   },
-  created() {
+  mounted() {
+    useUserStore().findnews()
     this.newsList = useUserStore().news
   },
   methods: {
@@ -16,8 +17,8 @@ export default {
     },
     handleClick(id) {
       // 执行页面跳转并携带数据
-      console.log('sssssssssssssssss')
-      console.log(id)
+      // console.log('sssssssssssssssss')
+      // console.log(id)
       this.$router.push({
         path: '/car/carnews/carnewsdetail',
         query: { id }

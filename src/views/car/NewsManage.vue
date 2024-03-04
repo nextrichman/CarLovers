@@ -18,7 +18,7 @@ onMounted(async () => {
   // console.log('sssssssssss')
   // console.log(news)
   await findselfnews(useUserStore().user.username)
-  console.log(useUserStore().selfnews)
+  // console.log(useUserStore().selfnews)
   tableData.value = useUserStore().selfnews
 })
 

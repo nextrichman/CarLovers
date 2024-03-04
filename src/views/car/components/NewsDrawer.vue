@@ -39,14 +39,41 @@ const writeDate2 = ref()
 
 const imgurl = ref()
 const uploadRef = ref()
-const onSelectFile = (uploadFile) => {
-  // 基于 FileReader 读取图片做预览
+// const onSelectFile = (uploadFile) => {
+//   // 基于 FileReader 读取图片做预览
+//   const reader = new FileReader()
+//   reader.readAsDataURL(uploadFile.raw)
+//   reader.onload = () => {
+//     imgurl.value = reader.result
+//     form.value.imgurl = reader.result
+//     // console.log(form.imgurl)
+//   }没做图片压缩图片大了传不上去
+// }
+const onSelectFile = async (uploadFile) => {
+  const image = new Image()
   const reader = new FileReader()
+
+  reader.onload = (e) => {
+    image.src = e.target.result
+  }
+
   reader.readAsDataURL(uploadFile.raw)
-  reader.onload = () => {
-    imgurl.value = reader.result
-    form.value.imgurl = reader.result
-    // console.log(form.imgurl)
+
+  image.onload = () => {
+    const canvas = document.createElement('canvas')
+    const ctx = canvas.getContext('2d')
+
+    // 设置 canvas 大小，并绘制压缩后的图片
+    canvas.width = image.width * 0.5 // 压缩到原始尺寸的一半
+    canvas.height = image.height * 0.5 // 压缩到原始尺寸的一半
+    ctx.drawImage(image, 0, 0, canvas.width, canvas.height)
+
+    // 将 canvas 中的图像转为 Data URL，可直接赋值给 img 元素的 src
+    const compressedDataUrl = canvas.toDataURL('image/jpeg', 0.6) // 第二个参数是压缩质量，0.6 表示 60% 质量
+
+    // 更新图片预览和表单数据
+    imgurl.value = compressedDataUrl
+    form.value.imgurl = compressedDataUrl
   }
 }
 

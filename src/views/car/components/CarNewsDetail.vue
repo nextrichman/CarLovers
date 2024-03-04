@@ -15,8 +15,18 @@ export default {
     }
   },
   methods: {
+    // toggleCommentInput() {
+    //   this.showInput = !this.showInput
+    //   this.$refs.commentInput.scrollIntoView() // 滚动到评论输入框
+    // },
     toggleCommentInput() {
       this.showInput = !this.showInput
+      if (this.showInput) {
+        this.$nextTick(() => {
+          this.$refs.commentInput.scrollIntoView()
+          this.$refs.commentInput.focus()
+        })
+      }
     },
     async addComment() {
       if (this.newComment.trim() !== '') {
@@ -93,20 +103,20 @@ export default {
         </li>
       </ul>
       <p v-else class="no-comments">暂无评论</p>
-      <a href="#h1">
-        <button
-          @click="toggleCommentInput"
-          v-if="!showInput"
-          class="add-comment-btn"
-        >
-          <span>添加评论</span>
-        </button>
-      </a>
+      <!-- <a href="#h1"></a> 在hash模式里不能用这种#h1的锚点会导致跳转页面/#/h1，会误以为是前缀 -->
+      <button
+        @click="toggleCommentInput"
+        v-if="!showInput"
+        class="add-comment-btn"
+      >
+        <span>添加评论</span>
+      </button>
+
       <transition name="fade">
         <div v-if="showInput" class="comment-input">
           <input
             type="text"
-            id="h1"
+            ref="commentInput"
             v-model="newComment"
             placeholder="输入评论"
             class="comment-text"
